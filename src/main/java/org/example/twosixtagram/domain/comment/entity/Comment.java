@@ -17,18 +17,18 @@ public class Comment extends BaseEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "contents")
+    @Column(name = "contents", nullable = false, length=200)
     private String contents;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feed_id")
+    @JoinColumn(name = "feed_id", nullable = false)
     private NewsFeed newsFeed;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Comment( User user, NewsFeed feed,String contents) {
+    public Comment(User user, NewsFeed feed, String contents) {
         this.user = user;
         this.newsFeed = feed;
         this.contents = contents;
