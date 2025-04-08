@@ -3,7 +3,6 @@ package org.example.twosixtagram.domain.user.entity;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum MBTI {
-
     ISTJ,
     ISFJ,
     INFJ,

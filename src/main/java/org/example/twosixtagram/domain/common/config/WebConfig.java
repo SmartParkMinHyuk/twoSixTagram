@@ -1,6 +1,7 @@
 package org.example.twosixtagram.domain.common.config;
 
 import jakarta.servlet.Filter;
+import org.example.twosixtagram.domain.common.filter.LoginFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
