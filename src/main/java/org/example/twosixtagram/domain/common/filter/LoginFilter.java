@@ -47,7 +47,8 @@ public class LoginFilter implements Filter {
     }
 
     private boolean isWhiteListed(String uri) {
-        return Arrays.asList(WHITE_LIST).contains(uri);
+//        return Arrays.asList(WHITE_LIST).contains(uri);
+        return true; // 수정필요 모든 요청 허용
     }
 
 }
