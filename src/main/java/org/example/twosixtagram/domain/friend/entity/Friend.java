@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import org.example.twosixtagram.domain.user.FriendStatus;
 import org.example.twosixtagram.domain.user.entity.User;
 
 @Entity
