@@ -1,14 +1,14 @@
 package org.example.twosixtagram.domain.user.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.*;
 import org.example.twosixtagram.domain.common.auditing.BaseEntity;
+import org.example.twosixtagram.domain.user.dto.UserSignupRequest;
 
 @Entity
 @Table(name = "user")
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
 
     @Id
@@ -32,13 +32,30 @@ public class User extends BaseEntity {
     private String idNum;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private UserStatus status;
 
-    public User() {
+    @Builder
+    public User(String email, String password, String name, MBTI mbti, String idNum, UserStatus status) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.mbti = mbti;
+        this.idNum = idNum;
+        this.status = status;
     }
 
-    public void changeStatus(UserStatus status) {
+    public static User create(UserSignupRequest request) {
+        return User.builder()
+                .email(request.getEmail())
+                .password(request.getPassword())
+                .name(request.getName())
+                .mbti(request.getMbti())
+                .idNum(request.getIdNum())
+                .status(UserStatus.ACTIVE)
+                .build();
+    }
+
+    public void userRemove(UserStatus status) {
         this.status = status;
     }
 }
