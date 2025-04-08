@@ -5,14 +5,32 @@ import jakarta.persistence.*;
 @Entity
 
 public class User {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true, length = 255)
     private String email;
+
+    @Column(nullable = false, length = 255)
     private String password;
+
+    @Column(nullable = false, length = 50)
     private String name;
-    private String mbti; //ENUM으로 처리 가능
-    private String idNum; //주민번호앞자리
 
     @Enumerated(EnumType.STRING)
-    private UserStatus status; //PENDING, ACCEPT, 탈퇴
+    @Column(length = 50)
+    private MBTI mbti;
+
+    @Column(name = "created_at", nullable = false, length = 6)
+    private String idNum;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status;
+
+    public void changeStatus(UserStatus status) {
+        this.status = status;
+    }
 }
