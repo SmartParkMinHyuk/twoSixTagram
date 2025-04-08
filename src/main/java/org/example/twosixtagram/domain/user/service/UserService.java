@@ -1,6 +1,7 @@
 package org.example.twosixtagram.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.twosixtagram.domain.common.config.PasswordEncoder;
 import org.example.twosixtagram.domain.user.dto.UserLoginRequest;
 import org.example.twosixtagram.domain.user.dto.UserSignupRequest;
 import org.example.twosixtagram.domain.user.dto.UserResponse;
@@ -15,12 +16,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public UserResponse signup(UserSignupRequest request) {
+
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+
         User user = User.builder()
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(encodedPassword)
                 .name(request.getName())
                 .mbti(request.getMbti())
                 .idNum(request.getIdNum())
@@ -31,14 +36,15 @@ public class UserService {
     }
 
     public UserResponse login(UserLoginRequest request) {
+
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
-        if (!user.getPassword().equals(request.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        return new UserResponse(user); // 세션 저장용 응답 객체
+        return new UserResponse(user);
     }
 }
 
