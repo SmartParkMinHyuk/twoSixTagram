@@ -1,4 +1,4 @@
 package org.example.twosixtagram.domain.friend.service;
 
-public interface FriendService {
+public class FriendServiceImpl {
 }
