@@ -34,4 +34,10 @@ public class Friend {
         public Friend() {
 
         }
+
+        public Friend(User user, User friend, FriendStatus status) {
+                this.user = user;
+                this.friend = friend;
+                this.status = status;
+        }
 }

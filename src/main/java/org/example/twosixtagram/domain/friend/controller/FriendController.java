@@ -21,9 +21,9 @@ public class FriendController {
             @PathVariable Long userId,
             @RequestBody @Valid RequestFriendDTO dto){
 
-        friendService.saveStatus(userId,dto.getFriendId(),dto.getStatus());
+        SaveStatusResponseDto saveStatusResponseDto = friendService.saveStatus(userId, dto.getFriendId(), dto.getStatus());
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(saveStatusResponseDto,HttpStatus.OK);
     }
 
 }
