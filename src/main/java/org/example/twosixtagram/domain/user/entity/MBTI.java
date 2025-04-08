@@ -2,8 +2,6 @@ package org.example.twosixtagram.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-import java.util.Arrays;
-
 public enum MBTI {
 
     ISTJ,
