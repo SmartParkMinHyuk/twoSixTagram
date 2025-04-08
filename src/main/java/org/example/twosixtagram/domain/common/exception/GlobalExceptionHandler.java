@@ -1,5 +1,6 @@
 package org.example.twosixtagram.domain.common.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,6 +18,27 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    /**
+     * 예시) 아이디가 중복 되었을 때,
+     * {
+     *  "error": "Invalid Request",
+     *  "message": "이메일이 중복되었습니다. 다른 이메일을 사용해주세요.",
+     *  "timestamp": "2025-04-08T20:02:34.2187844",
+     *  "status": 500
+     * }
+     **/
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, Object>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("timestamp", LocalDateTime.now());
+        errorResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+        errorResponse.put("error", "Duplicate Value");
+        errorResponse.put("message", "이메일이 중복되었습니다. 다른 이메일을 사용해주세요.");
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
 
     /**
     * 예시) 비밀번호 틀렸을 때, 401
