@@ -3,12 +3,13 @@ package org.example.twosixtagram.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.example.twosixtagram.domain.common.auditing.BaseEntity;
 
 @Entity
 @Table(name = "user")
 @Getter
 @AllArgsConstructor
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
