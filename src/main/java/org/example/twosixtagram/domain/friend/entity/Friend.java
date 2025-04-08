@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.example.twosixtagram.domain.user.FriendStatus;
+
 import org.example.twosixtagram.domain.user.entity.User;
 
 @Entity
@@ -31,5 +31,7 @@ public class Friend {
         @Enumerated(EnumType.STRING)
         private FriendStatus status;
 
+        public Friend() {
 
-    }
+        }
+}

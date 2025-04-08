@@ -6,6 +6,7 @@ public enum FriendStatus {
      *     ACCEPTED : 친구 수락,
      *     DECLINED : 친구 거절,
      *     REMOVED  : 삭제하기
+     *
      */
     PENDING("요청"),
     ACCEPTED("수락"),
