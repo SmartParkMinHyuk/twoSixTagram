@@ -1,7 +1,6 @@
 package org.example.twosixtagram.domain.user.entity;
 
 import jakarta.persistence.*;
-import org.example.twosixtagram.domain.user.FriendStatus;
 
 @Entity
 
@@ -15,5 +14,5 @@ public class User {
     private String idNum; //주민번호앞자리
 
     @Enumerated(EnumType.STRING)
-    private FriendStatus status; //PENDING, ACCEPT, 탈퇴
+    private UserStatus status; //PENDING, ACCEPT, 탈퇴
 }
