@@ -1,9 +1,13 @@
 package org.example.twosixtagram.domain.user.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Entity
-
+@Table(name = "user")
+@Getter
+@AllArgsConstructor
 public class User {
 
     @Id
@@ -23,12 +27,15 @@ public class User {
     @Column(length = 50)
     private MBTI mbti;
 
-    @Column(name = "created_at", nullable = false, length = 6)
+    @Column(name = "id_num", nullable = false, length = 6)
     private String idNum;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserStatus status;
+
+    public User() {
+    }
 
     public void changeStatus(UserStatus status) {
         this.status = status;
