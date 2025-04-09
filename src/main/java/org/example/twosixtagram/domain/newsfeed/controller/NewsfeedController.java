@@ -70,10 +70,12 @@ public class NewsfeedController {
         return ResponseEntity.ok(respDTO);
     }
     // 전체 조회( 댓글 수 포함)  API명세서에 추가하기
-
+//    public ResponseEntity<ResponseNewsFeed>
     // 비로그인 전체 조회(제목만 10개씩 조회 페이지네이션 )   API명세서에 추가하기
 
-    // 친구한명 뉴스피드 전체조회 ?
+    // 친구들의 뉴스피드 전체조회
+
+    // 친구한명 뉴스피드 전체조회
 
 
 }

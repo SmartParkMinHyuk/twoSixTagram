@@ -44,7 +44,7 @@ public class NewsfeedServiceImpl implements NewsfeedService {
                 .userEmail(foundNewsFeed.getUser().getEmail())
                 .title(foundNewsFeed.getTitle())
                 .contents(foundNewsFeed.getContents())
-                .modifiedAt(foundNewsFeed.getModifiedAt())
+                .updatedAt(foundNewsFeed.getUpdatedAt())
 //                .commentList() 댓글넣기
                 .build();
 
@@ -95,7 +95,7 @@ public class NewsfeedServiceImpl implements NewsfeedService {
                 .userEmail(foundNewsFeed.getUser().getEmail())
                 .title(foundNewsFeed.getTitle())
                 .contents(foundNewsFeed.getContents())
-                .modifiedAt(foundNewsFeed.getModifiedAt())
+                .updatedAt(foundNewsFeed.getUpdatedAt())
                 .build();
     }
 
