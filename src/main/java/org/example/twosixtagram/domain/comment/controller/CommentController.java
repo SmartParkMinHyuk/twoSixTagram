@@ -19,7 +19,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    // 댓글 등록 =========================================================
+    // 댓글 등록 =================================================================================================
     @PostMapping
     public ResponseEntity<ResponseCommentDTO> create(
             @PathVariable Long feedId,
@@ -30,7 +30,7 @@ public class CommentController {
     }
 
 
-    // 댓글 전체 목록 조회 =========================================================
+    // 댓글 전체 목록 조회 =================================================================================================
     @GetMapping
     public ResponseEntity<List<ResponseCommentDTO>> getComments(
             @PathVariable Long feedId,
@@ -41,7 +41,7 @@ public class CommentController {
         return ResponseEntity.ok(comments);
     }
 
-    // 댓글 수정 =========================================================
+    // 댓글 수정 =================================================================================================
     @PatchMapping("/{commentId}")
     public ResponseEntity<ResponseCommentDTO> updateComment(
             @PathVariable Long feedId,
@@ -52,7 +52,7 @@ public class CommentController {
         return ResponseEntity.ok(response);
     }
 
-    // 댓글 삭제 =========================================================
+    // 댓글 삭제 =================================================================================================
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteComment(
             @PathVariable Long feedId,
