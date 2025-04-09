@@ -7,7 +7,7 @@ import lombok.Getter;
 @Builder
 public class ResponseCommentDTO {
     private Long id;
-    private String content;
+    private String contents;
     private Long userId;
-    private Long newsFeedId;
+    private Long feedId;
 }

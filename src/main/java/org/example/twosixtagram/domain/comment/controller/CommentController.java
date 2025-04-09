@@ -48,7 +48,7 @@ public class CommentController {
             @PathVariable Long commentId,
             @RequestBody @Valid RequestCommentDTO requestCommentDTO
     ) {
-        ResponseCommentDTO response = commentService.updateComment(feedId, commentId, requestCommentDTO.getContent());
+        ResponseCommentDTO response = commentService.updateComment(feedId, commentId, requestCommentDTO.getContents());
         return ResponseEntity.ok(response);
     }
 

@@ -31,17 +31,17 @@ public class CommentService {
         User user = userRepository.findById(requestCommentDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("사용자 없음"));
 
-        NewsFeed feed = newsfeedRepository.findById(requestCommentDTO.getNewsFeedId())
+        NewsFeed feed = newsfeedRepository.findById(feedId)
                 .orElseThrow(() -> new RuntimeException("피드 없음"));
 
-        Comment comment = new Comment(user, feed, requestCommentDTO.getContent());
+        Comment comment = new Comment(user, feed, requestCommentDTO.getContents());
         commentRepository.save(comment);
 
         return ResponseCommentDTO.builder()
                 .id(comment.getId())
-                .content(comment.getContents())
+                .contents(comment.getContents())
                 .userId(user.getId())
-                .newsFeedId(feed.getId())
+                .feedId(feed.getId())
                 .build();
     }
 
@@ -53,9 +53,9 @@ public class CommentService {
         return commentPage.getContent().stream()
                 .map(comment -> ResponseCommentDTO.builder()
                         .id(comment.getId())
-                        .content(comment.getContents())
+                        .contents(comment.getContents())
                         .userId(comment.getUser().getId())
-                        .newsFeedId(comment.getNewsFeed().getId())
+                        .feedId(comment.getNewsFeed().getId())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -74,9 +74,9 @@ public class CommentService {
 
         return ResponseCommentDTO.builder()
                 .id(comment.getId())
-                .content(comment.getContents())
+                .contents(comment.getContents())
                 .userId(comment.getUser().getId())
-                .newsFeedId(comment.getNewsFeed().getId())
+                .feedId(comment.getNewsFeed().getId())
                 .build();
     }
 
