@@ -5,7 +5,7 @@ import lombok.Getter;
 import org.example.twosixtagram.domain.friend.entity.FriendStatus;
 
 @Getter
-public class RequestFriendDTO {
+public class RequestFriendDto {
 
     @NotBlank
     private final Long friendId;
@@ -14,8 +14,9 @@ public class RequestFriendDTO {
     private final FriendStatus status;
 
 
-    public RequestFriendDTO(Long friendId, FriendStatus status) {
+    public RequestFriendDto(Long friendId, FriendStatus status) {
         this.friendId = friendId;
         this.status = status;
     }
+
 }

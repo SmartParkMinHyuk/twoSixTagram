@@ -40,4 +40,8 @@ public class Friend {
                 this.friend = friend;
                 this.status = status;
         }
+
+        public void updateStatus(FriendStatus status){
+                this.status = status;
+        }
 }
