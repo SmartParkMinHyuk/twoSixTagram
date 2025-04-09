@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.example.twosixtagram.domain.newsfeed.entity.NewsFeed;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
-@Builder
-@AllArgsConstructor
 @Getter
-public class ResponseNewsfeedDTO {
+@AllArgsConstructor
+@Builder
+public class ResponseUpdateNewsFeedDTO {
     private Long id;
     private String userName;
     private String userEmail;
@@ -28,7 +27,7 @@ public class ResponseNewsfeedDTO {
                 .userEmail(newsFeed.getUser().getEmail())
                 .title(newsFeed.getTitle())
                 .contents(newsFeed.getContents())
-                .modifiedAt(newsFeed.getCreatedAt())
+                .modifiedAt(newsFeed.getModifiedAt())
                 .build();
     }
 }

@@ -8,6 +8,9 @@ import org.example.twosixtagram.domain.comment.entity.Comment;
 import org.example.twosixtagram.domain.common.auditing.BaseEntity;
 import org.example.twosixtagram.domain.user.entity.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "newsfeed")
 @Getter
@@ -25,18 +28,20 @@ public class NewsFeed extends BaseEntity {
     @Column(columnDefinition = "longtext")
     private String contents;
 
-    @Column(nullable = false)
-    private Long userid;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id",nullable = false)
-    private Comment comment;
+//    양방향 으로 할지 단방향으로 할지 고민더
+//    @OneToMany(mappedBy = "newsFeed", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+//    private List<Comment> comments = new ArrayList<>();
 
-    public NewsFeed() {
+    public NewsFeed() {;}
+
+    //수정
+    public void update(String title, String contents){
+        this.title = title;
+        this.contents = contents;
     }
 
 

@@ -11,7 +11,6 @@ import org.example.twosixtagram.domain.user.entity.User;
 @AllArgsConstructor
 @Getter
 public class RequestNewsfeedDTO {
-    //valid처리
     @NotBlank(message = "제목을 입력 해주세요.")
     private String title;
     @NotBlank(message = "내용을 입력 해주세요.")
