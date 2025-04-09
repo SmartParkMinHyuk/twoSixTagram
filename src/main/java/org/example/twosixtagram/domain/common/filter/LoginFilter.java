@@ -36,7 +36,7 @@ public class LoginFilter implements Filter {
         }
 
         Object userId = httpReq.getSession(false).getAttribute("userId");
-        System.out.println("TEST FILER USERID : " + userId); // 테스트 후 삭제 필요
+        System.out.println("TEST FILTER USERID : " + userId); // 테스트 후 삭제 필요
 
         if (userId == null) {
             httpRes.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
