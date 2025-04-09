@@ -10,6 +10,8 @@ import org.example.twosixtagram.domain.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/users")
@@ -29,10 +31,23 @@ public class UserController {
         UserResponse user = userService.login(request);
 
         HttpSession session = httpRequest.getSession(true);
-        session.setAttribute("user", user); // 세션에 저장
+        session.setAttribute("userId", user.getId());
 
         return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
     }
+
+//    @PatchMapping
+//    public ResponseEntity<UserResponse> updateuser(@Valid @RequestBody UserUpdateRequest request,
+//                                                   HttpServletRequest httpRequest){
+//        UserResponse user = (UserResponse) httpRequest.getSession(false).getAttribute("user");
+//
+//        if (user != null){
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
+//        }
+//
+//        return
+//
+//    }
 
 }
 
