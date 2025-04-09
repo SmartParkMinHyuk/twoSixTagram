@@ -55,6 +55,22 @@ public class User extends BaseEntity {
                 .build();
     }
 
+    public void changeEmail(String email) {
+        this.email = email;
+    }
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
+    public void changeName(String name) {
+        this.name = name;
+    }
+
+    public void changeMbti(MBTI mbti) {
+        this.mbti = mbti;
+    }
+
     public void userRemove(UserStatus status) {
         this.status = status;
     }
