@@ -18,7 +18,7 @@ public class ResponseNewsfeedDTO {
     private String contents;
     private String title;
     private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+    private LocalDateTime updatedAt;
 
     // Entity -> DTO 변환
     public static ResponseNewsfeedDTO toDTO(NewsFeed newsFeed) {
@@ -28,7 +28,7 @@ public class ResponseNewsfeedDTO {
                 .userEmail(newsFeed.getUser().getEmail())
                 .title(newsFeed.getTitle())
                 .contents(newsFeed.getContents())
-                .modifiedAt(newsFeed.getCreatedAt())
+                .updatedAt(newsFeed.getUpdatedAt())
                 .build();
     }
 }

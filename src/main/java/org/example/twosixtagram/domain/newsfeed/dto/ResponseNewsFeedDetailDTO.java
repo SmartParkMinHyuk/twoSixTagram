@@ -17,7 +17,7 @@ public class ResponseNewsFeedDetailDTO {
     private Long feedId;
     private String title;
     private String contents;
-    private LocalDateTime modifiedAt;
+    private LocalDateTime updatedAt;
 
     private String userName;   // 작성자 이름
     private String userEmail;  // 작성자 이메일
