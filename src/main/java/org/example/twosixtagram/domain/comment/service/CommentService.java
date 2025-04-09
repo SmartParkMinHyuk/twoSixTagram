@@ -10,7 +10,12 @@ import org.example.twosixtagram.domain.newsfeed.entity.NewsFeed;
 import org.example.twosixtagram.domain.newsfeed.repository.NewsfeedRepository;
 import org.example.twosixtagram.domain.user.entity.User;
 import org.example.twosixtagram.domain.user.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,12 +46,49 @@ public class CommentService {
     }
 
     // 댓글 전체 목록 조회 =========================================================
+    public List<ResponseCommentDTO> getCommentsByFeed(Long feedId, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Comment> commentPage = commentRepository.findByNewsFeedId(feedId, pageRequest);
 
+        return commentPage.getContent().stream()
+                .map(comment -> ResponseCommentDTO.builder()
+                        .id(comment.getId())
+                        .content(comment.getContents())
+                        .userId(comment.getUser().getId())
+                        .newsFeedId(comment.getNewsFeed().getId())
+                        .build())
+                .collect(Collectors.toList());
+    }
 
 
     // 댓글 수정 =========================================================
+    public ResponseCommentDTO updateComment(Long feedId, Long commentId, String newContent) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("댓글 없음"));
 
+        if (!comment.getNewsFeed().getId().equals(feedId)) {
+            throw new RuntimeException("피드 정보가 일치하지 않음");
+        }
 
-    // 댓글 석제 =========================================================
+        comment.updateContent(newContent);
 
+        return ResponseCommentDTO.builder()
+                .id(comment.getId())
+                .content(comment.getContents())
+                .userId(comment.getUser().getId())
+                .newsFeedId(comment.getNewsFeed().getId())
+                .build();
+    }
+
+    // 댓글 삭제 =========================================================
+    public void deleteComment(Long feedId, Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RuntimeException("댓글 없음"));
+
+        if (!comment.getNewsFeed().getId().equals(feedId)) {
+            throw new RuntimeException("피드 정보가 일치하지 않음");
+        }
+
+        commentRepository.delete(comment);
+    }
 }

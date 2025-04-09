@@ -32,16 +32,34 @@ public class CommentController {
 
     // 댓글 전체 목록 조회 =========================================================
     @GetMapping
-    public ResponseEntity<List<ResponseCommentDTO>> getComments(@PathVariable Long feedId) {
-//        return ResponseEntity.ok(commentService.getCommentByFeed(feedId));
-        return null;
+    public ResponseEntity<List<ResponseCommentDTO>> getComments(
+            @PathVariable Long feedId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        List<ResponseCommentDTO> comments = commentService.getCommentsByFeed(feedId, page, size);
+        return ResponseEntity.ok(comments);
     }
 
-
     // 댓글 수정 =========================================================
+    @PatchMapping("/{commentId}")
+    public ResponseEntity<ResponseCommentDTO> updateComment(
+            @PathVariable Long feedId,
+            @PathVariable Long commentId,
+            @RequestBody @Valid RequestCommentDTO requestCommentDTO
+    ) {
+        ResponseCommentDTO response = commentService.updateComment(feedId, commentId, requestCommentDTO.getContent());
+        return ResponseEntity.ok(response);
+    }
 
-
-    // 댓글 석제 =========================================================
-
+    // 댓글 삭제 =========================================================
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<Void> deleteComment(
+            @PathVariable Long feedId,
+            @PathVariable Long commentId
+    ) {
+        commentService.deleteComment(feedId, commentId);
+        return ResponseEntity.noContent().build();
+    }
 
 }
