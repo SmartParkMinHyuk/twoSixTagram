@@ -2,6 +2,7 @@ package org.example.twosixtagram.domain.friend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.twosixtagram.domain.friend.dto.response.AcceptStatusResponseDto;
+import org.example.twosixtagram.domain.friend.dto.response.GetFriendListResponseDto;
 import org.example.twosixtagram.domain.friend.dto.response.GetStatusResponseDto;
 import org.example.twosixtagram.domain.friend.dto.response.SaveStatusResponseDto;
 import org.example.twosixtagram.domain.friend.entity.Friend;
@@ -82,6 +83,21 @@ public class FriendServiceImpl implements FriendService {
 
             throw new IllegalArgumentException("친구요청이 거절 되었습니다.");
         }
+    }
+
+    @Override
+    public List<GetFriendListResponseDto> getFriendList(Long id) {
+
+        // userId와 status "ACCEPTED"에 알맞는 모든 테이블 로우 찾기
+        List<Friend> byUserId = friendRepository.findByUser_IdAndStatus(id,FriendStatus.ACCEPTED);
+
+        // 찾은 테이블들을 모두 GetFriendListResponseDto 형식에 알맞게 스트림 매핑
+        List<GetFriendListResponseDto> friendList = byUserId.stream()
+                .map(friend -> new GetFriendListResponseDto(
+                        friend.getFriend().getEmail(),friend.getFriend().getName()))
+                .toList();
+
+        return friendList;
     }
 
 

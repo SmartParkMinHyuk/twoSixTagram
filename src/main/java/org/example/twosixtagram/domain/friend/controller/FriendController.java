@@ -6,6 +6,7 @@ import org.example.twosixtagram.domain.friend.dto.request.AcceptStatusRequestDto
 import org.example.twosixtagram.domain.friend.dto.request.RequestFriendDto;
 import org.example.twosixtagram.domain.friend.dto.request.UpdateRequestFriendDto;
 import org.example.twosixtagram.domain.friend.dto.response.AcceptStatusResponseDto;
+import org.example.twosixtagram.domain.friend.dto.response.GetFriendListResponseDto;
 import org.example.twosixtagram.domain.friend.dto.response.GetStatusResponseDto;
 import org.example.twosixtagram.domain.friend.dto.response.SaveStatusResponseDto;
 import org.example.twosixtagram.domain.friend.service.FriendService;
@@ -56,7 +57,14 @@ public class FriendController {
 
     }
 
+    // 친구 전체 목록 조회 API
+    @GetMapping("/{id}")
+    public ResponseEntity<List<GetFriendListResponseDto>> getFriendList(@PathVariable Long id){
 
+        List<GetFriendListResponseDto> friendList = friendService.getFriendList(id);
+
+        return new ResponseEntity<>(friendList,HttpStatus.OK);
+    }
 
 
 }
