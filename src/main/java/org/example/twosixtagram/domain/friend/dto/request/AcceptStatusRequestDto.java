@@ -4,11 +4,13 @@ import lombok.Getter;
 import org.example.twosixtagram.domain.friend.entity.FriendStatus;
 
 @Getter
-public class UpdateRequestFriendDto {
+public class AcceptStatusRequestDto {
+    private final Long userId;
 
     private final FriendStatus status;
 
-    public UpdateRequestFriendDto(FriendStatus status) {
+    public AcceptStatusRequestDto(Long userId, FriendStatus status) {
+        this.userId = userId;
         this.status = status;
     }
 }

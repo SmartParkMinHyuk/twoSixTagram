@@ -1,14 +1,14 @@
-package org.example.twosixtagram.domain.friend.dto.request;
+package org.example.twosixtagram.domain.friend.dto.response;
 
 import lombok.Getter;
 import org.example.twosixtagram.domain.friend.entity.FriendStatus;
 
 @Getter
-public class UpdateRequestFriendDto {
+public class AcceptStatusResponseDto {
 
     private final FriendStatus status;
 
-    public UpdateRequestFriendDto(FriendStatus status) {
+    public AcceptStatusResponseDto(FriendStatus status) {
         this.status = status;
     }
 }

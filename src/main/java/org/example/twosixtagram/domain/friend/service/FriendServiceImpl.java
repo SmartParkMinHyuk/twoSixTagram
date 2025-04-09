@@ -1,6 +1,7 @@
 package org.example.twosixtagram.domain.friend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.twosixtagram.domain.friend.dto.response.AcceptStatusResponseDto;
 import org.example.twosixtagram.domain.friend.dto.response.GetStatusResponseDto;
 import org.example.twosixtagram.domain.friend.dto.response.SaveStatusResponseDto;
 import org.example.twosixtagram.domain.friend.entity.Friend;
@@ -9,6 +10,7 @@ import org.example.twosixtagram.domain.friend.repository.FriendRepository;
 import org.example.twosixtagram.domain.user.entity.User;
 import org.example.twosixtagram.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,12 +42,15 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public List<GetStatusResponseDto> getStatus(Long friendId) {
 
+        // 입럭받은 friendId로 friend_id컬럼 조회 및 status컬럼에 PENDING인 로우를 전체 조회
         List<Friend> pendingFriend = friendRepository.findByFriend_IdAndStatus(friendId,FriendStatus.PENDING);
 
+        // pendingFriend가 비었을 시 요청 없음 반환
         if(pendingFriend.isEmpty()){
             throw new IllegalArgumentException("친구 요청이 없습니다.");
         }
 
+        // pendingFriend을 stream으로 GetStatusResponseDto에 매핑
         List<GetStatusResponseDto> dtolist = pendingFriend.stream()
                 .map(friend -> new GetStatusResponseDto(
                         friend.getUser().getId(),
@@ -56,4 +61,28 @@ public class FriendServiceImpl implements FriendService {
         return dtolist ;
 
     }
+
+    @Transactional
+    @Override
+    public AcceptStatusResponseDto acceptStatus(Long friendId, Long userId ,FriendStatus status) {
+        // status에 ACCEPTED가 들어오면 update 메서드를 통해 상태 변경
+        if(status == FriendStatus.ACCEPTED) {
+            Friend byFriendId1 = friendRepository.findByFriend_IdAndUser_Id(friendId,userId).orElseThrow(
+                    () -> new IllegalArgumentException("요청이 없습니다."));
+
+            byFriendId1.updateStatus(status);
+
+            return new AcceptStatusResponseDto(byFriendId1.getStatus());
+            // status에 DECLINED가 들어오면 테이블 삭제 및 예외처리로 메세지 출력
+        } else {
+            Friend byFriendId2 = friendRepository.findByFriend_IdAndUser_Id(friendId,userId).orElseThrow(
+                    () -> new IllegalArgumentException("요청이 없습니다."));
+
+            friendRepository.delete(byFriendId2);
+
+            throw new IllegalArgumentException("친구요청이 거절 되었습니다.");
+        }
+    }
+
+
 }

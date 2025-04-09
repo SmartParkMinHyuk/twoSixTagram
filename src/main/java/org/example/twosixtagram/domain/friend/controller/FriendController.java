@@ -2,8 +2,10 @@ package org.example.twosixtagram.domain.friend.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.twosixtagram.domain.friend.dto.request.AcceptStatusRequestDto;
 import org.example.twosixtagram.domain.friend.dto.request.RequestFriendDto;
 import org.example.twosixtagram.domain.friend.dto.request.UpdateRequestFriendDto;
+import org.example.twosixtagram.domain.friend.dto.response.AcceptStatusResponseDto;
 import org.example.twosixtagram.domain.friend.dto.response.GetStatusResponseDto;
 import org.example.twosixtagram.domain.friend.dto.response.SaveStatusResponseDto;
 import org.example.twosixtagram.domain.friend.service.FriendService;
@@ -39,4 +41,22 @@ public class FriendController {
 
         return new ResponseEntity<>(friend,HttpStatus.OK);
     }
+
+    // 친구 수락 API
+    @PatchMapping("/{friendId}")
+    public ResponseEntity<AcceptStatusResponseDto> acceptStatus(
+            @PathVariable Long friendId,
+            @RequestBody AcceptStatusRequestDto dto
+            ){
+
+        // AcceptStatusRequestDto에 들어올 수 있는 건 "ACCEPTED" 혹은 "DECLIEND"
+        AcceptStatusResponseDto acceptStatusResponseDto = friendService.acceptStatus(friendId,dto.getUserId(),dto.getStatus());
+
+        return new ResponseEntity<>(acceptStatusResponseDto,HttpStatus.OK);
+
+    }
+
+
+
+
 }
