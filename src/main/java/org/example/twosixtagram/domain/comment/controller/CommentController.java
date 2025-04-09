@@ -25,7 +25,7 @@ public class CommentController {
             @PathVariable Long feedId,
             @RequestBody @Valid RequestCommentDTO requestCommentDTO
     ) {
-        ResponseCommentDTO response = commentService.writeComment(feedId, requestCommentDTO);
+        ResponseCommentDTO response = commentService.createComment(feedId, requestCommentDTO);
         return ResponseEntity.ok(response);
     }
 
@@ -37,7 +37,7 @@ public class CommentController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        List<ResponseCommentDTO> comments = commentService.getCommentsByFeed(feedId, page, size);
+        List<ResponseCommentDTO> comments = commentService.getCommentsByFeedId(feedId, page, size);
         return ResponseEntity.ok(comments);
     }
 

@@ -27,7 +27,7 @@ public class CommentService {
     private final UserRepository userRepository;
 
     // 댓글 등록 =========================================================
-    public ResponseCommentDTO writeComment(Long feedId, RequestCommentDTO requestCommentDTO) {
+    public ResponseCommentDTO createComment(Long feedId, RequestCommentDTO requestCommentDTO) {
         User user = userRepository.findById(requestCommentDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("사용자 없음"));
 
@@ -46,7 +46,7 @@ public class CommentService {
     }
 
     // 댓글 전체 목록 조회 =========================================================
-    public List<ResponseCommentDTO> getCommentsByFeed(Long feedId, int page, int size) {
+    public List<ResponseCommentDTO> getCommentsByFeedId(Long feedId, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Comment> commentPage = commentRepository.findByNewsFeedId(feedId, pageRequest);
 
