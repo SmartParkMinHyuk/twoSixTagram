@@ -10,7 +10,6 @@ import org.example.twosixtagram.domain.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
@@ -36,18 +35,30 @@ public class UserController {
         return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
     }
 
-//    @PatchMapping
-//    public ResponseEntity<UserResponse> updateuser(@Valid @RequestBody UserUpdateRequest request,
-//                                                   HttpServletRequest httpRequest){
-//        UserResponse user = (UserResponse) httpRequest.getSession(false).getAttribute("user");
-//
-//        if (user != null){
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
-//        }
-//
-//        return
-//
-//    }
+    @PatchMapping
+    public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UserUpdateRequest request,
+                                                   HttpServletRequest httpRequest){
+        HttpSession session = httpRequest.getSession(false);
+
+        if (session == null || session.getAttribute("userId") == null){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
+        }
+
+        long userId = (long) session.getAttribute("userId");
+        return new ResponseEntity<>(userService.updateUser(userId, request), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<UserResponse> getUser(HttpServletRequest httpRequest) {
+        HttpSession session = httpRequest.getSession(false);
+
+        if (session == null || session.getAttribute("userId") == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
+        }
+
+        long userId = (long) session.getAttribute("userId");
+        return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
+    }
 
 }
 
