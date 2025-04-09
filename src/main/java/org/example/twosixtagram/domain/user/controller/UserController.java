@@ -21,12 +21,14 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserResponse> signup(@Valid @RequestBody UserSignupRequest request) {
+
         return new ResponseEntity<>(userService.signup(request), HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@Valid @RequestBody UserLoginRequest request,
                                         HttpServletRequest httpRequest) {
+
         UserResponse user = userService.login(request);
 
         HttpSession session = httpRequest.getSession(true);
@@ -35,9 +37,24 @@ public class UserController {
         return new ResponseEntity<>("로그인 성공", HttpStatus.OK);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest httpRequest) {
+
+        HttpSession session = httpRequest.getSession(false);
+
+        if (session == null || session.getAttribute("userId") == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
+        }
+
+        session.invalidate();
+
+        return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
+    }
+
     @PatchMapping
     public ResponseEntity<UserResponse> updateUser(@Valid @RequestBody UserUpdateRequest request,
                                                    HttpServletRequest httpRequest){
+
         HttpSession session = httpRequest.getSession(false);
 
         if (session == null || session.getAttribute("userId") == null){
@@ -50,6 +67,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<UserResponse> getUser(HttpServletRequest httpRequest) {
+
         HttpSession session = httpRequest.getSession(false);
 
         if (session == null || session.getAttribute("userId") == null) {
@@ -60,5 +78,21 @@ public class UserController {
         return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
     }
 
+    @DeleteMapping
+    public ResponseEntity<String> deleteUser(@Valid @RequestBody UserDeleteRequest request,
+                                                   HttpServletRequest httpRequest){
+
+        HttpSession session = httpRequest.getSession(false);
+
+        if (session == null || session.getAttribute("userId") == null){
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
+        }
+
+        long userId = (long) session.getAttribute("userId");
+
+        userService.deleteUser(userId, request.getPassword());
+                
+        return new ResponseEntity<>("회원 탈퇴 완료", HttpStatus.OK);
+    }
 }
 
