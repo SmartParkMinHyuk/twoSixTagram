@@ -29,14 +29,16 @@ public class LoginFilter implements Filter {
         // 회원가입 POST만 화이트리스트에 포함, 공용경로 -> 회원탈퇴(DELETE) 화이트리스트에 미포함
         boolean isSignUp = uri.equals("/api/users") && method.equals("POST");
 
+
         if (isSignUp || isWhiteListed(uri)) {
             chain.doFilter(request, response);
             return;
         }
 
-        UserResponse user = (UserResponse) httpReq.getSession().getAttribute("user");
+        Object userId = httpReq.getSession(false).getAttribute("userId");
+        System.out.println("TEST FILER USERID : " + userId); // 테스트 후 삭제 필요
 
-        if (user == null) {
+        if (userId == null) {
             httpRes.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             httpRes.setContentType("application/json");
             httpRes.getWriter().write("{\"message\": \"로그인이 필요합니다.\"}");
