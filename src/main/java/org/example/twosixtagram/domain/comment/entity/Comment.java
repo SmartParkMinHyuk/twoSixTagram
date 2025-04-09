@@ -1,6 +1,7 @@
 package org.example.twosixtagram.domain.comment.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.twosixtagram.domain.common.auditing.BaseEntity;
@@ -28,10 +29,14 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Builder
     public Comment(User user, NewsFeed feed, String contents) {
         this.user = user;
         this.newsFeed = feed;
         this.contents = contents;
+    }
 
+    public void updateContent(String newContent) {
+        this.contents = newContent;
     }
 }
