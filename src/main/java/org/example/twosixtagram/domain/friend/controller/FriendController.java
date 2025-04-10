@@ -4,11 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.twosixtagram.domain.friend.dto.request.AcceptStatusRequestDto;
 import org.example.twosixtagram.domain.friend.dto.request.RequestFriendDto;
-import org.example.twosixtagram.domain.friend.dto.request.UpdateRequestFriendDto;
-import org.example.twosixtagram.domain.friend.dto.response.AcceptStatusResponseDto;
-import org.example.twosixtagram.domain.friend.dto.response.GetFriendListResponseDto;
-import org.example.twosixtagram.domain.friend.dto.response.GetStatusResponseDto;
-import org.example.twosixtagram.domain.friend.dto.response.SaveStatusResponseDto;
+import org.example.twosixtagram.domain.friend.dto.response.*;
 import org.example.twosixtagram.domain.friend.service.FriendService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -78,6 +74,17 @@ public class FriendController {
         friendService.deleteFriend(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 친구 프로필 조회
+    // PathVariable에 id(객체)
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<GetProfileResponseDto> getProfile(@PathVariable Long id){
+
+        GetProfileResponseDto profile = friendService.getProfile(id);
+
+        return new ResponseEntity<>(profile,HttpStatus.OK);
+
     }
 
 
