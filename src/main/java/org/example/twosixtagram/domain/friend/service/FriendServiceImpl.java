@@ -116,7 +116,9 @@ public class FriendServiceImpl implements FriendService {
                         friend.getUser().getName()))
                 .toList());
 
-        return friendList;
+        return friendList.stream()
+                .distinct()
+                .toList();
     }
 
 
