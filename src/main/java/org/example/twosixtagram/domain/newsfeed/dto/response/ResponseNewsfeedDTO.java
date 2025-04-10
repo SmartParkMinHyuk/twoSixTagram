@@ -1,4 +1,4 @@
-package org.example.twosixtagram.domain.newsfeed.dto;
+package org.example.twosixtagram.domain.newsfeed.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,10 +7,10 @@ import org.example.twosixtagram.domain.newsfeed.entity.NewsFeed;
 
 import java.time.LocalDateTime;
 
-@Getter
-@AllArgsConstructor
 @Builder
-public class ResponseUpdateNewsFeedDTO {
+@AllArgsConstructor
+@Getter
+public class ResponseNewsfeedDTO {
     private Long id;
     private String userName;
     private String userEmail;

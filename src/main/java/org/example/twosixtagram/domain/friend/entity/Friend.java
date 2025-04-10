@@ -17,12 +17,12 @@ public class Friend {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
-        // 나
+        // 요청자
         @ManyToOne
         @JoinColumn(name = "user_id")
         private User user;
 
-        // 친구
+        // 요청받는사람
         @ManyToOne
         @JoinColumn(name = "friend_id")
         private User friend;
@@ -33,5 +33,15 @@ public class Friend {
 
         public Friend() {
 
+        }
+
+        public Friend(User user, User friend, FriendStatus status) {
+                this.user = user;
+                this.friend = friend;
+                this.status = status;
+        }
+
+        public void updateStatus(FriendStatus status){
+                this.status = status;
         }
 }
