@@ -3,13 +3,21 @@ package org.example.twosixtagram.domain.common.filter;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.example.twosixtagram.domain.user.dto.UserResponse;
+import org.example.twosixtagram.domain.user.entity.User;
+import org.example.twosixtagram.domain.user.entity.UserStatus;
+import org.example.twosixtagram.domain.user.repository.UserRepository;
+import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-
+@RequiredArgsConstructor
 public class LoginFilter implements Filter {
+
+    private final UserRepository userRepository;
 
     private static final String[] WHITE_LIST = {
             "/api/unauthenticated", // 로그인 하지않은 사용자
@@ -35,12 +43,23 @@ public class LoginFilter implements Filter {
             return;
         }
 
-        Object userId = httpReq.getSession(false).getAttribute("userId");
-
-        if (userId == null) {
+        HttpSession session = httpReq.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
             httpRes.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            httpRes.setContentType("application/json");
+            httpRes.setCharacterEncoding("UTF-8");
+            httpRes.setContentType("application/json; charset=UTF-8");
             httpRes.getWriter().write("{\"message\": \"로그인이 필요합니다.\"}");
+            return;
+        }
+
+        Long userId = (Long) session.getAttribute("userId");
+        User user = userRepository.findById(userId).orElse(null);
+
+        if (user == null || user.getStatus() != UserStatus.ACTIVE) {
+            httpRes.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            httpRes.setCharacterEncoding("UTF-8");
+            httpRes.setContentType("application/json; charset=UTF-8");
+            httpRes.getWriter().write("{\"message\": \"탈퇴 또는 비활성화된 사용자입니다.\"}");
             return;
         }
 
