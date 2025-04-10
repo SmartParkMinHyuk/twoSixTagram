@@ -118,7 +118,7 @@ public class NewsfeedServiceImpl implements NewsfeedService {
                         .id(comment.getId())
                         .contents(comment.getContents())
                         .userId(comment.getUser().getId())
-                        .feedId(comment.getNewsFeed().getId())
+                        .userName(comment.getUser().getName())
                         .build())
                 .toList();
 
