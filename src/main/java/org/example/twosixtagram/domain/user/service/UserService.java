@@ -25,16 +25,7 @@ public class UserService {
     @Transactional
     public UserResponse signup(UserSignupRequest request) {
 
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
-
-        User user = User.builder()
-                .email(request.getEmail())
-                .password(encodedPassword)
-                .name(request.getName())
-                .mbti(request.getMbti())
-                .idNum(request.getIdNum())
-                .status(UserStatus.ACTIVE)
-                .build();
+        User user = User.create(request, passwordEncoder);
 
         return new UserResponse(userRepository.save(user));
     }
@@ -46,6 +37,10 @@ public class UserService {
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        if (user.getStatus() == UserStatus.UNACTIVE) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "탈퇴한 유저입니다.");
         }
 
         return new UserResponse(user);

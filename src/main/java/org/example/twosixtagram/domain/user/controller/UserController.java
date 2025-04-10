@@ -91,7 +91,9 @@ public class UserController {
         long userId = (long) session.getAttribute("userId");
 
         userService.deleteUser(userId, request.getPassword());
-                
+
+        session.invalidate();
+
         return new ResponseEntity<>("회원 탈퇴 완료", HttpStatus.OK);
     }
 }
