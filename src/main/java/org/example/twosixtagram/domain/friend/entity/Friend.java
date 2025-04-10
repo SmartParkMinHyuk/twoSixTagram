@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import org.example.twosixtagram.domain.common.auditing.BaseEntity;
 import org.example.twosixtagram.domain.user.entity.User;
 
 @Entity
@@ -12,7 +13,7 @@ import org.example.twosixtagram.domain.user.entity.User;
 @Builder
 @Getter
 @AllArgsConstructor
-public class Friend {
+public class Friend extends BaseEntity {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
