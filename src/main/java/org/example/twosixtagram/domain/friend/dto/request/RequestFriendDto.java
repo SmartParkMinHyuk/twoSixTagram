@@ -1,16 +1,16 @@
 package org.example.twosixtagram.domain.friend.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import org.example.twosixtagram.domain.friend.entity.FriendStatus;
 
 @Getter
 public class RequestFriendDto {
 
-    @NotBlank
+    @NotNull
     private final Long friendId;
-
-    @NotBlank
+    @NotNull
     private final FriendStatus status;
 
 

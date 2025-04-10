@@ -13,7 +13,9 @@ import org.example.twosixtagram.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,12 @@ public class FriendServiceImpl implements FriendService {
 
         // userId,friendId,status를 Friend 엔티티 타입으로 인스턴스화
         Friend saveStatus = new Friend(userOpt, friendOpt, status);
+
+        if(friendRepository.findByFriend_IdAndUser_Id(userOpt.getId(),friendOpt.getId()).isPresent()||
+                friendRepository.findByFriend_IdAndUser_Id(friendOpt.getId(),userOpt.getId()).isPresent())
+        {
+            throw new RuntimeException("잘못된 요청입니다.");
+        }
 
         friendRepository.save(saveStatus);
         // 프론트에서 friend의 정보를 확인하고
@@ -88,15 +96,41 @@ public class FriendServiceImpl implements FriendService {
     public List<GetFriendListResponseDto> getFriendList(Long id) {
 
         // userId와 status "ACCEPTED"에 알맞는 모든 테이블 로우 찾기
+        // id가 user인 경우
         List<Friend> byUserId = friendRepository.findByUser_IdAndStatus(id,FriendStatus.ACCEPTED);
+        // id가 friend인 경우
+        List<Friend> byFriendId = friendRepository.findByFriend_IdAndStatus(id, FriendStatus.ACCEPTED);
 
-        // 찾은 테이블들을 모두 GetFriendListResponseDto 형식에 알맞게 스트림 매핑
-        List<GetFriendListResponseDto> friendList = byUserId.stream()
+        // 둘 다 합치기
+        List<GetFriendListResponseDto> friendList = new ArrayList<>();
+
+        // user가 요청한 경우
+        friendList.addAll(byUserId.stream()
                 .map(friend -> new GetFriendListResponseDto(
-                        friend.getFriend().getEmail(),friend.getFriend().getName()))
-                .toList();
+                        friend.getFriend().getId(),
+                        friend.getFriend().getEmail(),
+                        friend.getFriend().getName()))
+                .toList());
+
+        // friend가 요청한 경우
+        friendList.addAll(byFriendId.stream()
+                .map(friend -> new GetFriendListResponseDto(
+                        friend.getUser().getId(),
+                        friend.getUser().getEmail(),
+                        friend.getUser().getName()))
+                .toList());
 
         return friendList;
+    }
+
+    @Override
+    public void deleteFriend(Long id) {
+
+        Friend byUserIdOrFriendId = friendRepository.findByUser_IdOrFriend_Id(id, id).orElseThrow(
+                () -> new IllegalArgumentException("옳바르지 않은 요청입니다.")
+        );
+
+        friendRepository.delete(byUserIdOrFriendId);
     }
 
 

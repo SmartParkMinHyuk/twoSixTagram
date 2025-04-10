@@ -20,7 +20,7 @@ public enum FriendStatus {
     }
 
     public String getDescription(){
-        return getDescription();
+        return this.description;
     }
 
 }

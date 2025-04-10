@@ -17,4 +17,6 @@ public interface FriendService {
     AcceptStatusResponseDto acceptStatus(Long friendId,Long userId,FriendStatus status);
 
     List<GetFriendListResponseDto> getFriendList(Long id);
+
+    void deleteFriend(Long id);
 }
