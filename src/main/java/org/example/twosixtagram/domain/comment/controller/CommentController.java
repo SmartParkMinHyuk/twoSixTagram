@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import static org.example.twosixtagram.domain.common.util.SessionUtils.getUserId;
+
 
 import java.util.List;
 
@@ -30,14 +32,9 @@ public class CommentController {
             @RequestBody @Valid RequestCommentDTO requestCommentDTO,
             HttpServletRequest httpServletRequest
     ) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
-        }
-
-        Long userId = (Long) session.getAttribute("userId");
+        Long userId = getUserId(httpServletRequest);
         ResponseCommentDTO response = commentService.createComment(feedId, userId, requestCommentDTO);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 
@@ -60,11 +57,7 @@ public class CommentController {
             @RequestBody @Valid RequestCommentDTO requestCommentDTO,
             HttpServletRequest httpServletRequest
     ) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
-        }
-        Long userId = (Long) session.getAttribute("userId");
+        Long userId = getUserId(httpServletRequest);
 
         ResponseCommentDTO response = commentService.updateComment(feedId, commentId, requestCommentDTO.getContents(), userId);
         return ResponseEntity.ok(response);
@@ -77,11 +70,7 @@ public class CommentController {
             @PathVariable Long commentId,
             HttpServletRequest httpServletRequest
     ) {
-        HttpSession session = httpServletRequest.getSession(false);
-        if (session == null || session.getAttribute("userId") == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
-        }
-        Long userId = (Long) session.getAttribute("userId");
+        Long userId = getUserId(httpServletRequest);
 
         commentService.deleteComment(feedId, commentId, userId);
         return ResponseEntity.noContent().build();

@@ -107,7 +107,7 @@ public class CommentService {
                 .orElseThrow(() -> new RuntimeException("댓글 없음"));
 
         if (!comment.getNewsFeed().getId().equals(feedId)) {
-            throw new RuntimeException("피드 정보가 일치하지 않음");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "피드 정보가 일치하지 않습니다.");
         }
 
         Long commentAuthorId = comment.getUser().getId();
