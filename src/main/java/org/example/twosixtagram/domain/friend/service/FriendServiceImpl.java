@@ -139,7 +139,7 @@ public class FriendServiceImpl implements FriendService {
                 () -> new IllegalArgumentException("옳바르지 않은 요청입니다."));
 
         // 만약 id(객체)가 friend_id일시
-        if(profile.getFriend().getId()==id){
+        if(profile.getFriend().getId().equals(id)){
             return new GetProfileResponseDto(
                     profile.getFriend().getId(),
                     profile.getFriend().getName(),
