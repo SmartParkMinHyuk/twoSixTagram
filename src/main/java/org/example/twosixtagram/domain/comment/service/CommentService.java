@@ -55,7 +55,9 @@ public class CommentService {
                 .id(savedComment.getId())
                 .contents(savedComment.getContents())
                 .userId(user.getId())
-                .feedId(feed.getId())
+                .userName(comment.getUser().getName())
+                .createdAt(comment.getCreatedAt())
+                .modifiedAt(comment.getUpdatedAt())
                 .build();
     }
 
@@ -69,7 +71,9 @@ public class CommentService {
                         .id(comment.getId())
                         .contents(comment.getContents())
                         .userId(comment.getUser().getId())
-                        .feedId(comment.getNewsFeed().getId())
+                        .userName(comment.getUser().getName())
+                        .createdAt(comment.getCreatedAt())
+                        .modifiedAt(comment.getUpdatedAt())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -97,14 +101,16 @@ public class CommentService {
                 .id(comment.getId())
                 .contents(comment.getContents())
                 .userId(comment.getUser().getId())
-                .feedId(comment.getNewsFeed().getId())
+                .userName(comment.getUser().getName())
+                .createdAt(comment.getCreatedAt())
+                .modifiedAt(comment.getUpdatedAt())
                 .build();
     }
 
     // 댓글 삭제 =================================================================================================
     public void deleteComment(Long feedId, Long commentId, Long userId) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("댓글 없음"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."));
 
         if (!comment.getNewsFeed().getId().equals(feedId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "피드 정보가 일치하지 않습니다.");
@@ -114,7 +120,7 @@ public class CommentService {
         Long feedAuthorId = comment.getNewsFeed().getUser().getId();
 
         if (!userId.equals(commentAuthorId) && !userId.equals(feedAuthorId)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "삭제 권한이 없습니다.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "삭제 권한이 없습니다.");
         }
 
         commentRepository.delete(comment);
