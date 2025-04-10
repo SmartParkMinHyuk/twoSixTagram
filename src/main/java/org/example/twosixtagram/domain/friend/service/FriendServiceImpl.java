@@ -1,10 +1,7 @@
 package org.example.twosixtagram.domain.friend.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.twosixtagram.domain.friend.dto.response.AcceptStatusResponseDto;
-import org.example.twosixtagram.domain.friend.dto.response.GetFriendListResponseDto;
-import org.example.twosixtagram.domain.friend.dto.response.GetStatusResponseDto;
-import org.example.twosixtagram.domain.friend.dto.response.SaveStatusResponseDto;
+import org.example.twosixtagram.domain.friend.dto.response.*;
 import org.example.twosixtagram.domain.friend.entity.Friend;
 import org.example.twosixtagram.domain.friend.entity.FriendStatus;
 import org.example.twosixtagram.domain.friend.repository.FriendRepository;
@@ -15,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -123,6 +119,7 @@ public class FriendServiceImpl implements FriendService {
         return friendList;
     }
 
+
     @Override
     public void deleteFriend(Long id) {
 
@@ -131,6 +128,33 @@ public class FriendServiceImpl implements FriendService {
         );
 
         friendRepository.delete(byUserIdOrFriendId);
+    }
+
+
+    @Override
+    public GetProfileResponseDto getProfile(Long id) {
+
+        // id(객체)가 user_id인지 friend_id인지 모르기 때문에 둘다 조회
+        Friend profile = friendRepository.findByUser_IdOrFriend_Id(id,id).orElseThrow(
+                () -> new IllegalArgumentException("옳바르지 않은 요청입니다."));
+
+        // 만약 id(객체)가 friend_id일시
+        if(profile.getFriend().getId()==id){
+            return new GetProfileResponseDto(
+                    profile.getFriend().getId(),
+                    profile.getFriend().getName(),
+                    profile.getFriend().getEmail(),
+                    profile.getFriend().getMbti());
+
+        } else {
+            // 만약 id(객체)가 user_id일시
+            return new GetProfileResponseDto(
+                    profile.getUser().getId(),
+                    profile.getUser().getName(),
+                    profile.getUser().getEmail(),
+                    profile.getUser().getMbti());
+        }
+
     }
 
 
