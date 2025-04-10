@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
         errorResponse.put("timestamp", LocalDateTime.now());
         errorResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
         errorResponse.put("error", "Duplicate Value");
-        errorResponse.put("message", "이메일이 중복되었습니다. 다른 이메일을 사용해주세요.");
+        errorResponse.put("message", "DB ERROR");
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }

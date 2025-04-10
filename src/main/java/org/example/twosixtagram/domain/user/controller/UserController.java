@@ -42,10 +42,6 @@ public class UserController {
 
         HttpSession session = httpRequest.getSession(false);
 
-        if (session == null || session.getAttribute("userId") == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
-        }
-
         session.invalidate();
 
         return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
@@ -57,10 +53,6 @@ public class UserController {
 
         HttpSession session = httpRequest.getSession(false);
 
-        if (session == null || session.getAttribute("userId") == null){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
-        }
-
         long userId = (long) session.getAttribute("userId");
         return new ResponseEntity<>(userService.updateUser(userId, request), HttpStatus.OK);
     }
@@ -69,10 +61,6 @@ public class UserController {
     public ResponseEntity<UserResponse> getUser(HttpServletRequest httpRequest) {
 
         HttpSession session = httpRequest.getSession(false);
-
-        if (session == null || session.getAttribute("userId") == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
-        }
 
         long userId = (long) session.getAttribute("userId");
         return new ResponseEntity<>(userService.getUser(userId), HttpStatus.OK);
@@ -84,14 +72,12 @@ public class UserController {
 
         HttpSession session = httpRequest.getSession(false);
 
-        if (session == null || session.getAttribute("userId") == null){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
-        }
-
         long userId = (long) session.getAttribute("userId");
 
         userService.deleteUser(userId, request.getPassword());
-                
+
+        session.invalidate();
+
         return new ResponseEntity<>("회원 탈퇴 완료", HttpStatus.OK);
     }
 }
