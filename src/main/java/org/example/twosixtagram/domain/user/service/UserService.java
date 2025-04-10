@@ -2,6 +2,7 @@ package org.example.twosixtagram.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.twosixtagram.domain.common.config.PasswordEncoder;
+import org.example.twosixtagram.domain.newsfeed.service.NewsfeedService;
 import org.example.twosixtagram.domain.user.dto.UserLoginRequest;
 import org.example.twosixtagram.domain.user.dto.UserSignupRequest;
 import org.example.twosixtagram.domain.user.dto.UserResponse;
@@ -24,6 +25,10 @@ public class UserService {
 
     @Transactional
     public UserResponse signup(UserSignupRequest request) {
+
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 사용 중인 이메일입니다.");
+        }
 
         User user = User.create(request, passwordEncoder);
 

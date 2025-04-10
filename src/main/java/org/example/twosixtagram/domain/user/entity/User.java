@@ -74,5 +74,10 @@ public class User extends BaseEntity {
 
     public void userRemove(UserStatus status) {
         this.status = status;
+        this.name = "Invalided User";
+        this.email = "deleted_user_" + this.email + "@deleted.com";
+        this.password = "deleted_password_" + this.password + "#PASS";
+        this.idNum = "000000";
+        this.mbti = null;
     }
 }
