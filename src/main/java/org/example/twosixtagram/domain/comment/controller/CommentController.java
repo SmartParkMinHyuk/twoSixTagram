@@ -1,19 +1,23 @@
 package org.example.twosixtagram.domain.comment.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.twosixtagram.domain.comment.dto.RequestCommentDTO;
 import org.example.twosixtagram.domain.comment.dto.ResponseCommentDTO;
 import org.example.twosixtagram.domain.comment.service.CommentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/feeds/{feedId}/comments")
+@RequestMapping("/api/feeds/{feedId}/comments")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -23,9 +27,16 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<ResponseCommentDTO> create(
             @PathVariable Long feedId,
-            @RequestBody @Valid RequestCommentDTO requestCommentDTO
+            @RequestBody @Valid RequestCommentDTO requestCommentDTO,
+            HttpServletRequest httpServletRequest
     ) {
-        ResponseCommentDTO response = commentService.createComment(feedId, requestCommentDTO);
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
+        }
+
+        Long userId = (Long) session.getAttribute("userId");
+        ResponseCommentDTO response = commentService.createComment(feedId, userId, requestCommentDTO);
         return ResponseEntity.ok(response);
     }
 

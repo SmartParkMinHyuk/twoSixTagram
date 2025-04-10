@@ -30,24 +30,30 @@ public class CommentService {
     private final UserRepository userRepository;
 
     // 댓글 등록 ===================================================================================================
-    public ResponseCommentDTO createComment(Long feedId, RequestCommentDTO requestCommentDTO) {
-        User user = userRepository.findById(requestCommentDTO.getUserId())
+    public ResponseCommentDTO createComment(Long feedId, Long userId, RequestCommentDTO requestCommentDTO) {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
 
-        // 유저가 탈퇴 상태인지 확인
-        if (user.getStatus() == UserStatus.UNACTIVE) {
+        // 사용자 조회 및 탈퇴 여부 확인
+        if (user.getStatus() == null || user.getStatus() == UserStatus.UNACTIVE) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "탈퇴한 유저입니다.");
         }
 
+        // 피드 존재 확인
+        // 1. 보안 + 무결성 보장 (프론트에서 조작 방지)
+        // 2. 댓글-피드 연결을 위해 실제 Entity 필요
+        // 3. JPA Cascade & 연관관계 기능 활용 (ex. 피드 삭제 시 댓글도 함께 삭제)
         NewsFeed feed = newsfeedRepository.findById(feedId)
                 .orElseThrow(() ->new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
 
+        // 댓글 생성 + 저장
+        // feed: feedId X --> JPA 관계 매핑을 위한 실제 엔티티 인스턴스.
         Comment comment = new Comment(user, feed, requestCommentDTO.getContents());
-        commentRepository.save(comment);
+        Comment savedComment = commentRepository.save(comment);
 
         return ResponseCommentDTO.builder()
-                .id(comment.getId())
-                .contents(comment.getContents())
+                .id(savedComment.getId())
+                .contents(savedComment.getContents())
                 .userId(user.getId())
                 .feedId(feed.getId())
                 .build();
