@@ -17,12 +17,12 @@ public class Friend {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
-        // 나
+        // 요청자
         @ManyToOne
         @JoinColumn(name = "user_id")
         private User user;
 
-        // 친구
+        // 요청받는사람
         @ManyToOne
         @JoinColumn(name = "friend_id")
         private User friend;
