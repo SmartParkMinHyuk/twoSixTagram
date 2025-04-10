@@ -1,19 +1,23 @@
 package org.example.twosixtagram.domain.comment.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.twosixtagram.domain.comment.dto.RequestCommentDTO;
 import org.example.twosixtagram.domain.comment.dto.ResponseCommentDTO;
 import org.example.twosixtagram.domain.comment.service.CommentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import static org.example.twosixtagram.domain.common.util.SessionUtils.getUserId;
+
 
 import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/feeds/{feedId}/comments")
+@RequestMapping("/api/feeds/{feedId}/comments")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -23,10 +27,12 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<ResponseCommentDTO> create(
             @PathVariable Long feedId,
-            @RequestBody @Valid RequestCommentDTO requestCommentDTO
+            @RequestBody @Valid RequestCommentDTO requestCommentDTO,
+            HttpServletRequest httpServletRequest
     ) {
-        ResponseCommentDTO response = commentService.createComment(feedId, requestCommentDTO);
-        return ResponseEntity.ok(response);
+        Long userId = getUserId(httpServletRequest);
+        ResponseCommentDTO response = commentService.createComment(feedId, userId, requestCommentDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 
@@ -46,9 +52,12 @@ public class CommentController {
     public ResponseEntity<ResponseCommentDTO> updateComment(
             @PathVariable Long feedId,
             @PathVariable Long commentId,
-            @RequestBody @Valid RequestCommentDTO requestCommentDTO
+            @RequestBody @Valid RequestCommentDTO requestCommentDTO,
+            HttpServletRequest httpServletRequest
     ) {
-        ResponseCommentDTO response = commentService.updateComment(feedId, commentId, requestCommentDTO.getContents());
+        Long userId = getUserId(httpServletRequest);
+
+        ResponseCommentDTO response = commentService.updateComment(feedId, commentId, requestCommentDTO.getContents(), userId);
         return ResponseEntity.ok(response);
     }
 
@@ -56,9 +65,12 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteComment(
             @PathVariable Long feedId,
-            @PathVariable Long commentId
+            @PathVariable Long commentId,
+            HttpServletRequest httpServletRequest
     ) {
-        commentService.deleteComment(feedId, commentId);
+        Long userId = getUserId(httpServletRequest);
+
+        commentService.deleteComment(feedId, commentId, userId);
         return ResponseEntity.noContent().build();
     }
 

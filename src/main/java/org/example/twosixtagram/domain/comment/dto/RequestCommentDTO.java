@@ -8,8 +8,6 @@ import lombok.Getter;
 @Builder
 public class RequestCommentDTO {
 
-    private Long userId;
-
     @NotBlank(message = "댓글 내용을 입력해주세요.")
     private String contents;
 
