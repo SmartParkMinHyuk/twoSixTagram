@@ -134,9 +134,11 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public GetProfileResponseDto getProfile(Long id) {
 
+        // id(객체)가 user_id인지 friend_id인지 모르기 때문에 둘다 조회
         Friend profile = friendRepository.findByUser_IdOrFriend_Id(id,id).orElseThrow(
                 () -> new IllegalArgumentException("옳바르지 않은 요청입니다."));
 
+        // 만약 id(객체)가 friend_id일시
         if(profile.getFriend().getId()==id){
             return new GetProfileResponseDto(
                     profile.getFriend().getId(),
@@ -145,6 +147,7 @@ public class FriendServiceImpl implements FriendService {
                     profile.getFriend().getMbti());
 
         } else {
+            // 만약 id(객체)가 user_id일시
             return new GetProfileResponseDto(
                     profile.getUser().getId(),
                     profile.getUser().getName(),
