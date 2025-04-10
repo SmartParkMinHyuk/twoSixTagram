@@ -76,12 +76,19 @@ public class CommentService {
 
 
     // 댓글 수정 =================================================================================================
-    public ResponseCommentDTO updateComment(Long feedId, Long commentId, String newContent) {
+    public ResponseCommentDTO updateComment(Long feedId, Long commentId, String newContent, Long userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("댓글 없음"));
 
         if (!comment.getNewsFeed().getId().equals(feedId)) {
             throw new RuntimeException("피드 정보가 일치하지 않음");
+        }
+
+        Long commentAuthorId = comment.getUser().getId();
+        Long feedAuthorId = comment.getNewsFeed().getUser().getId();
+
+        if (!userId.equals(commentAuthorId) && !userId.equals(feedAuthorId)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "수정 권한이 없습니다.");
         }
 
         comment.updateContent(newContent);
@@ -95,12 +102,19 @@ public class CommentService {
     }
 
     // 댓글 삭제 =================================================================================================
-    public void deleteComment(Long feedId, Long commentId) {
+    public void deleteComment(Long feedId, Long commentId, Long userId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("댓글 없음"));
 
         if (!comment.getNewsFeed().getId().equals(feedId)) {
             throw new RuntimeException("피드 정보가 일치하지 않음");
+        }
+
+        Long commentAuthorId = comment.getUser().getId();
+        Long feedAuthorId = comment.getNewsFeed().getUser().getId();
+
+        if (!userId.equals(commentAuthorId) && !userId.equals(feedAuthorId)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "삭제 권한이 없습니다.");
         }
 
         commentRepository.delete(comment);

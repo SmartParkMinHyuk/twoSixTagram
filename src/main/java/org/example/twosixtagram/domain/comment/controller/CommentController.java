@@ -57,9 +57,16 @@ public class CommentController {
     public ResponseEntity<ResponseCommentDTO> updateComment(
             @PathVariable Long feedId,
             @PathVariable Long commentId,
-            @RequestBody @Valid RequestCommentDTO requestCommentDTO
+            @RequestBody @Valid RequestCommentDTO requestCommentDTO,
+            HttpServletRequest httpServletRequest
     ) {
-        ResponseCommentDTO response = commentService.updateComment(feedId, commentId, requestCommentDTO.getContents());
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
+        }
+        Long userId = (Long) session.getAttribute("userId");
+
+        ResponseCommentDTO response = commentService.updateComment(feedId, commentId, requestCommentDTO.getContents(), userId);
         return ResponseEntity.ok(response);
     }
 
@@ -67,9 +74,16 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteComment(
             @PathVariable Long feedId,
-            @PathVariable Long commentId
+            @PathVariable Long commentId,
+            HttpServletRequest httpServletRequest
     ) {
-        commentService.deleteComment(feedId, commentId);
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session == null || session.getAttribute("userId") == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다.");
+        }
+        Long userId = (Long) session.getAttribute("userId");
+
+        commentService.deleteComment(feedId, commentId, userId);
         return ResponseEntity.noContent().build();
     }
 
