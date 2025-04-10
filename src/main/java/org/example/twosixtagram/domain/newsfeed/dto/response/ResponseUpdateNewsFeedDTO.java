@@ -1,17 +1,16 @@
-package org.example.twosixtagram.domain.newsfeed.dto;
+package org.example.twosixtagram.domain.newsfeed.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.example.twosixtagram.domain.newsfeed.entity.NewsFeed;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
-@Builder
-@AllArgsConstructor
 @Getter
-public class ResponseNewsfeedDTO {
+@AllArgsConstructor
+@Builder
+public class ResponseUpdateNewsFeedDTO {
     private Long id;
     private String userName;
     private String userEmail;
@@ -21,8 +20,8 @@ public class ResponseNewsfeedDTO {
     private LocalDateTime updatedAt;
 
     // Entity -> DTO 변환
-    public static ResponseNewsfeedDTO toDTO(NewsFeed newsFeed) {
-        return ResponseNewsfeedDTO.builder()
+    public static ResponseUpdateNewsFeedDTO toDTO(NewsFeed newsFeed) {
+        return ResponseUpdateNewsFeedDTO.builder()
                 .id(newsFeed.getId())
                 .userName(newsFeed.getUser().getName())
                 .userEmail(newsFeed.getUser().getEmail())
