@@ -35,7 +35,7 @@ public class FriendController {
     }
 
     // 친구 요청 확인 API
-    @GetMapping("/{friendId}")
+    @GetMapping("/check/{friendId}")
     public ResponseEntity<List<GetStatusResponseDto>> getStatus(@PathVariable Long friendId){
 
         List<GetStatusResponseDto> friend = friendService.getStatus(friendId);
@@ -64,6 +64,15 @@ public class FriendController {
         List<GetFriendListResponseDto> friendList = friendService.getFriendList(id);
 
         return new ResponseEntity<>(friendList,HttpStatus.OK);
+    }
+
+    // 친구 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteFriend(@PathVariable Long id){
+
+        friendService.deleteFriend(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

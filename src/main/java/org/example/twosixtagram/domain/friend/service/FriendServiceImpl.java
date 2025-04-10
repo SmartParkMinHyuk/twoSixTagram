@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +34,12 @@ public class FriendServiceImpl implements FriendService {
 
         // userId,friendId,status를 Friend 엔티티 타입으로 인스턴스화
         Friend saveStatus = new Friend(userOpt, friendOpt, status);
+
+        if(friendRepository.findByFriend_IdAndUser_Id(userOpt.getId(),friendOpt.getId()).isPresent()||
+                friendRepository.findByFriend_IdAndUser_Id(friendOpt.getId(),userOpt.getId()).isPresent())
+        {
+            throw new RuntimeException("잘못된 요청입니다.");
+        }
 
         friendRepository.save(saveStatus);
         // 프론트에서 friend의 정보를 확인하고
@@ -93,10 +100,20 @@ public class FriendServiceImpl implements FriendService {
         // 찾은 테이블들을 모두 GetFriendListResponseDto 형식에 알맞게 스트림 매핑
         List<GetFriendListResponseDto> friendList = byUserId.stream()
                 .map(friend -> new GetFriendListResponseDto(
-                        friend.getFriend().getEmail(),friend.getFriend().getName()))
+                        friend.getFriend().getId(),friend.getFriend().getEmail(),friend.getFriend().getName()))
                 .toList();
 
         return friendList;
+    }
+
+    @Override
+    public void deleteFriend(Long id) {
+
+        Friend byUserIdOrFriendId = friendRepository.findByUser_IdOrFriend_Id(id, id).orElseThrow(
+                () -> new IllegalArgumentException("옳바르지 않은 요청입니다.")
+        );
+
+        friendRepository.delete(byUserIdOrFriendId);
     }
 
 
