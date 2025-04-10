@@ -8,8 +8,9 @@ import org.example.twosixtagram.domain.friend.entity.FriendStatus;
 @Getter
 public class RequestFriendDto {
 
+    @NotNull
     private final Long friendId;
-
+    @NotNull
     private final FriendStatus status;
 
 
