@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
+import java.util.List;
+
 public interface NewsfeedService {
     // 비로그인시 제목만 조회
     Slice<ResponseUnauthenticatedDTO> getTitleFeeds(Pageable pageable);
@@ -19,7 +21,7 @@ public interface NewsfeedService {
     // 친구들피드만 전체 조회
     public Slice<ResponseNewsFeedListDTO> findByUserIdIn(Long userId, Pageable pageable);
 
-    // 피드 전체 조회
+// 피드 전체 조회
 //    Slice<ResponseNewsFeedListDTO> getList(Pageable pageable);
 
     //댓글수 포함 전체조회

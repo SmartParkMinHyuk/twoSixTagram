@@ -17,9 +17,7 @@ public class ResponseNewsFeedListDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-
-
-    //다음 페이지 여부
+//다음 페이지 여부
 //        private Long commentCount; //게시글에 달린 댓글 수
 
     public static ResponseNewsFeedListDTO toDTO(NewsFeed feed) {

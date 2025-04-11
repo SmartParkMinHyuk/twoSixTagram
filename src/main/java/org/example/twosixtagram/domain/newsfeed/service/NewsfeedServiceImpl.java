@@ -29,7 +29,6 @@ import java.util.List;
 @Service
 public class NewsfeedServiceImpl implements NewsfeedService {
 
-
     //레포지토리 주입
     private final NewsfeedRepository newsfeedRepository;
     private final UserRepository userRepository;
@@ -60,7 +59,6 @@ public class NewsfeedServiceImpl implements NewsfeedService {
         return new SliceImpl<>(respDTO,pageable,feeds.hasNext());
     }
 
-
     @Transactional(readOnly = true)
     @Override
     public Slice<ResponseNewsFeedListDTO> findByUserIdIn(Long userId, Pageable pageable) {
@@ -77,20 +75,6 @@ public class NewsfeedServiceImpl implements NewsfeedService {
 
         return new SliceImpl<>(dtoList, pageable, feedSlice.hasNext());
     }
-
-//    //전체보기
-//    @Transactional
-//    @Override
-//    public Slice<ResponseNewsFeedListDTO> getList(Pageable pageable) {
-//
-//        //게시글 전체 조회 -> slice
-//        Slice<NewsFeed> feedPage = newsfeedRepository.findAll(pageable);
-//        //dto로 변환
-//        // 엔티티를 DTO로 변환
-//        List<ResponseNewsFeedListDTO> dtoList = feedPage.getContent().stream().map(ResponseNewsFeedListDTO::toDTO).toList();
-//
-//        return new SliceImpl<>(dtoList, pageable, feedPage.hasNext());
-//    }
 
     //전체보기  댓글 count 포함
     @Transactional
@@ -131,14 +115,12 @@ public class NewsfeedServiceImpl implements NewsfeedService {
     @Override
     public ResponseNewsfeedDTO register(RequestNewsfeedDTO requestNewsfeedDTO, Long userId) {
         //유저 조회
-//      User user = UserRepository.findByIdOrElseThrow(loginUser); 디폴트로 ?
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
         //toEntity
         NewsFeed foundNewsFeed = requestNewsfeedDTO.toEntity(user);
         if(!foundNewsFeed.getUser().getId().equals(user.getId())){
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "권한이 없습니다.");
-            // new UnauthorizedException("Unauthorized"); 예외 핸들러 쏴주기
         }
 
         // 저장 (영속)
@@ -182,9 +164,22 @@ public class NewsfeedServiceImpl implements NewsfeedService {
             // new UnauthorizedException("Unauthorized"); 예외 핸들러 쏴주기
         }
 
-        //게시글 삭제시 해당 게시글 댓글 전체 삭제   나중에 JPQL 찾아보고 ㄱㄱ 댓글 완료되면 진행 **
-//        commentRepository.deleteAllByNewsFeedById(id);//newsFeedId
+        //게시글 삭제시 해당 게시글 댓글 전체 삭제
         commentRepository.deleteAllByNewsFeedId(id);  //벌크연산
         newsfeedRepository.delete(newsFeed);
     }
+
+//    전체보기
+//    @Transactional
+//    @Override
+//    public Slice<ResponseNewsFeedListDTO> getList(Pageable pageable) {
+//
+//        //게시글 전체 조회 -> slice
+//        Slice<NewsFeed> feedPage = newsfeedRepository.findAll(pageable);
+//        //dto로 변환
+//        // 엔티티를 DTO로 변환
+//        List<ResponseNewsFeedListDTO> dtoList = feedPage.getContent().stream().map(ResponseNewsFeedListDTO::toDTO).toList();
+//
+//        return new SliceImpl<>(dtoList, pageable, feedPage.hasNext());
+//    }
 }
