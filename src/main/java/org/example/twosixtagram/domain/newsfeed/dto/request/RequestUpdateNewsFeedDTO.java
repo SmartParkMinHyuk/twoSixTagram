@@ -1,4 +1,4 @@
-package org.example.twosixtagram.domain.newsfeed.dto;
+package org.example.twosixtagram.domain.newsfeed.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

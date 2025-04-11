@@ -3,6 +3,7 @@ package org.example.twosixtagram.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.twosixtagram.domain.common.auditing.BaseEntity;
+import org.example.twosixtagram.domain.common.config.PasswordEncoder;
 import org.example.twosixtagram.domain.user.dto.UserSignupRequest;
 
 @Entity
@@ -44,10 +45,10 @@ public class User extends BaseEntity {
         this.status = status;
     }
 
-    public static User create(UserSignupRequest request) {
+    public static User create(UserSignupRequest request, PasswordEncoder encoder) {
         return User.builder()
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(encoder.encode(request.getPassword()))
                 .name(request.getName())
                 .mbti(request.getMbti())
                 .idNum(request.getIdNum())
@@ -73,5 +74,10 @@ public class User extends BaseEntity {
 
     public void userRemove(UserStatus status) {
         this.status = status;
+        this.name = "Invalided User";
+        this.email = "deleted_user_" + this.email + "@deleted.com";
+        this.password = "deleted_password_" + this.password + "#PASS";
+        this.idNum = "000000";
+        this.mbti = null;
     }
 }

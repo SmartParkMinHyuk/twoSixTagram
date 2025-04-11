@@ -2,6 +2,7 @@ package org.example.twosixtagram.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.twosixtagram.domain.common.config.PasswordEncoder;
+import org.example.twosixtagram.domain.newsfeed.service.NewsfeedService;
 import org.example.twosixtagram.domain.user.dto.UserLoginRequest;
 import org.example.twosixtagram.domain.user.dto.UserSignupRequest;
 import org.example.twosixtagram.domain.user.dto.UserResponse;
@@ -25,16 +26,11 @@ public class UserService {
     @Transactional
     public UserResponse signup(UserSignupRequest request) {
 
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 사용 중인 이메일입니다.");
+        }
 
-        User user = User.builder()
-                .email(request.getEmail())
-                .password(encodedPassword)
-                .name(request.getName())
-                .mbti(request.getMbti())
-                .idNum(request.getIdNum())
-                .status(UserStatus.ACTIVE)
-                .build();
+        User user = User.create(request, passwordEncoder);
 
         return new UserResponse(userRepository.save(user));
     }
@@ -46,6 +42,10 @@ public class UserService {
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        if (user.getStatus() == UserStatus.UNACTIVE) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "탈퇴한 유저입니다.");
         }
 
         return new UserResponse(user);
@@ -89,7 +89,7 @@ public class UserService {
     @Transactional
     public void deleteUser(Long userId, String password) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");

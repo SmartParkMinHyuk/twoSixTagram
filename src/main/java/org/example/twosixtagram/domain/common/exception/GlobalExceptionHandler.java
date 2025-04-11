@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -34,7 +35,7 @@ public class GlobalExceptionHandler {
         errorResponse.put("timestamp", LocalDateTime.now());
         errorResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
         errorResponse.put("error", "Duplicate Value");
-        errorResponse.put("message", "이메일이 중복되었습니다. 다른 이메일을 사용해주세요.");
+        errorResponse.put("message", "DB ERROR");
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -110,4 +111,43 @@ public class GlobalExceptionHandler {
         return errorResponse;
     }
 
+    /**
+     * Optional.get() 등에서 발생할 수 있는 NoSuchElementException 처리
+     */
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<Map<String, Object>> handleNoSuchElementException(NoSuchElementException ex) {
+        return new ResponseEntity<>(
+                buildErrorResponse(HttpStatus.NOT_FOUND, "Resource Not Found", "요청한 리소스를 찾을 수 없습니다."),
+                HttpStatus.NOT_FOUND
+        );
+    }
+
+    /**
+     * 처리되지 않은 런타임 예외 잡아내는 핸들러
+     */
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Map<String, Object>> handleRuntimeException(RuntimeException ex) {
+        return new ResponseEntity<>(
+                buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected Error",
+                        ex.getMessage() != null ? ex.getMessage() : "예기치 못한 오류가 발생했습니다."),
+                HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
+    /**
+     * 공통 오류 응답 포맷 생성
+     *
+     * @param status HTTP 상태
+     * @param error 에러 요약
+     * @param message 상세 메시지
+     * @return 오류 응답 Map
+     */
+    private Map<String, Object> buildErrorResponse(HttpStatus status, String error, String message) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("timestamp", LocalDateTime.now());
+        errorResponse.put("status", status.value());
+        errorResponse.put("error", error);
+        errorResponse.put("message", message);
+        return errorResponse;
+    }
 }
