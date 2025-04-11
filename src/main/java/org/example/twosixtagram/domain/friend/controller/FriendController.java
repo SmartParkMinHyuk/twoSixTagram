@@ -1,5 +1,7 @@
 package org.example.twosixtagram.domain.friend.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.twosixtagram.domain.friend.dto.request.AcceptStatusRequestDto;
@@ -21,10 +23,12 @@ public class FriendController {
 
     // 친구 요청 API
     // Pathvariable에 요청자 id(주체) RequestBody에 요청받는 사람 id(객체)
-    @PostMapping("/{userId}")
+    @PostMapping
     public ResponseEntity<SaveStatusResponseDto> saveStatus(
-            @PathVariable Long userId,
+            HttpServletRequest httpServletRequest,
             @RequestBody @Valid RequestFriendDto dto){
+
+        Long userId = (Long) httpServletRequest.getSession(false).getAttribute("userId");
 
         SaveStatusResponseDto saveStatusResponseDto = friendService.saveStatus(userId, dto.getFriendId(), dto.getStatus());
 
@@ -33,8 +37,11 @@ public class FriendController {
 
     // 친구 요청 확인 API
     // PathVariable에 요청받은 사람 id(주체)
-    @GetMapping("/check/{friendId}")
-    public ResponseEntity<List<GetStatusResponseDto>> getStatus(@PathVariable Long friendId){
+    @GetMapping("/check")
+    public ResponseEntity<List<GetStatusResponseDto>> getStatus(
+            HttpServletRequest httpServletRequest
+    ){
+        Long friendId = (Long) httpServletRequest.getSession(false).getAttribute("userId");
 
         List<GetStatusResponseDto> friend = friendService.getStatus(friendId);
 
@@ -43,11 +50,13 @@ public class FriendController {
 
     // 친구 수락 API
     // PathVariable에 요청 받은 사람 id(주체) RequestBody에 요청자의 id(객체)
-    @PatchMapping("/{friendId}")
+    @PatchMapping
     public ResponseEntity<AcceptStatusResponseDto> acceptStatus(
-            @PathVariable Long friendId,
+            HttpServletRequest httpServletRequest,
             @RequestBody AcceptStatusRequestDto dto
             ){
+
+        Long friendId = (Long) httpServletRequest.getSession(false).getAttribute("userId");
 
         // AcceptStatusRequestDto에 들어올 수 있는 건 "ACCEPTED" 혹은 "DECLIEND"
         AcceptStatusResponseDto acceptStatusResponseDto = friendService.acceptStatus(friendId,dto.getUserId(),dto.getStatus());
@@ -58,8 +67,10 @@ public class FriendController {
 
     // 친구 전체 목록 조회 API
     // PathVariable에 id(주체)
-    @GetMapping("/{id}")
-    public ResponseEntity<List<GetFriendListResponseDto>> getFriendList(@PathVariable Long id){
+    @GetMapping
+    public ResponseEntity<List<GetFriendListResponseDto>> getFriendList(HttpServletRequest httpServletRequest){
+
+        Long id = (Long) httpServletRequest.getSession(false).getAttribute("userId");
 
         List<GetFriendListResponseDto> friendList = friendService.getFriendList(id);
 
