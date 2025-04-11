@@ -22,7 +22,7 @@ public interface NewsfeedRepository extends JpaRepository<NewsFeed,Long> {
             "n.id, n.title, n.contents,n.user.name,n.user.email,n.createdAt, n.updatedAt, COUNT(c)" +
             ") " +
             "FROM NewsFeed n LEFT JOIN n.comments c " +
-            "GROUP BY n.id, n.title, n.contents, n.createdAt " +
+            "GROUP BY n.id, n.title, n.contents,n.user.name,n.user.email,n.createdAt, n.updatedAt, n.createdAt " +
             "ORDER BY n.createdAt DESC")
     Slice<ResponseNewsFeedListCommentCountDTO> findAllWithCommentCount(Pageable pageable);
 

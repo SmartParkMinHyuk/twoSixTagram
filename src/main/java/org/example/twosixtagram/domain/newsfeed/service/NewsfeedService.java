@@ -9,8 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
-import java.util.List;
-
 public interface NewsfeedService {
     // 비로그인시 제목만 조회
     Slice<ResponseUnauthenticatedDTO> getTitleFeeds(Pageable pageable);
