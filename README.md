@@ -13,8 +13,6 @@
 ## 📁 프로젝트 폴더 구조
 <div align="center">
 
-<p>도메인 주도 방식 설계 (DDD)</p>
-
 <img src="img_3.png" alt="DDD 설계 이미지" width="300"/>
 
 </div>
