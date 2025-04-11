@@ -22,16 +22,23 @@
 
 ## 👾 ERD
 
-![img.png](img.png)
+<div align="center">
+  <img src="img.png" alt="img" width="600"/>
+</div>
 
 
 ## 🌈 와이어프레임
 
-![img_1.png](img_1.png)
+<div align="center">
+  <img src="img_1.png" alt="img" width="700"/>
+</div>
 
 
 ## 🚥 UML 다이어그램 (행위 다이어그램)
-![img_2.png](img_2.png)
+
+<div align="center">
+  <img src="img_2.png" alt="img" width="700"/>
+</div>
 
 ## 📌 API 명세서
 
