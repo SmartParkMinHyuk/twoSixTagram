@@ -11,9 +11,14 @@
 | 지송이 | 댓글(Comment) | `/api/feeds/{feedId}/comments`, `/api/feeds/{feedId}/comments/{commentId}` 등                                        | 댓글 작성, 수정, 삭제, 조회 | 피드 기반 댓글 |
 
 ## 📁 프로젝트 폴더 구조
-도메인 주도 방식 설계 (DDD) <br/>
+<div align="center">
 
-![img_3.png](img_3.png)
+<p>도메인 주도 방식 설계 (DDD)</p>
+
+<img src="img_3.png" alt="DDD 설계 이미지" width="300"/>
+
+</div>
+
 
 ## 👾 ERD
 
