@@ -11,30 +11,10 @@
 | 지송이 | 댓글(Comment) | `/api/feeds/{feedId}/comments`, `/api/feeds/{feedId}/comments/{commentId}` 등                                        | 댓글 작성, 수정, 삭제, 조회 | 피드 기반 댓글 |
 
 ## 📁 프로젝트 폴더 구조
+도메인 주도 방식 설계 (DDD) <br/>
 
-```plaintext
-.
-├── README.md
-├── build.gradle
-├── gradle
-│   └── wrapper
-│       ├── gradle-wrapper.jar
-│       └── gradle-wrapper.properties
-├── gradlew
-├── gradlew.bat
-├── img.png
-├── settings.gradle
-├── src
-│   ├── main
-│   │   ├── java
-│   │   │   └── org
-│   │   └── resources
-│   │       └── application.properties
-│   └── test
-│       └── java
-│           └── org
-└── tree.md
-```
+![img_3.png](img_3.png)
+
 ## 👾 ERD
 
 ![img.png](img.png)
