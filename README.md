@@ -1,5 +1,15 @@
 # 📘 뉴스피드 프로젝트
 
+## 🌳 개발환경
+언어 : ![Static Badge](https://img.shields.io/badge/Java-red?style=flat-square)
+
+JDK : ![Static Badge](https://img.shields.io/badge/JDK-17-yellow?style=flat-square)
+
+프레임워크 : ![Static Badge](https://img.shields.io/badge/SpringBoot-%23FFFF00?logo=springboot)
+
+DB : ![Static Badge](https://img.shields.io/badge/MySql-%23FFFFFF?style=flat&logo=mysql)
+
+ORM : ![Static Badge](https://img.shields.io/badge/JPA-FFA500?style=flat)
 
 ## 팀명 - 이륙하자 (26조)
 
